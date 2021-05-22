@@ -4,16 +4,22 @@ RUN echo "NPM Version:" && npm --version
 
 FROM nginx:latest
 COPY --from=node_base . .
-WORKDIR /
-RUN mkdir /frontend
-RUN mkdir /server
+WORKDIR /app
+RUN mkdir /app/frontend
+RUN mkdir /app/server
 RUN apt-get upgrade
 RUN apt-get update
+RUN npm install -g npm@7.14.0 --loglevel=error
 RUN adduser --no-create-home --system --group --shell /bin/false nginx
 COPY ./nginx-forward-conf /etc/nginx/sites-available/default
 COPY ./nginx-forward-conf /etc/nginx/sites-enabled/default
 RUN service nginx restart
 RUN npm i -g pm2
-COPY . .
+RUN npm i -g nodemon
 
-CMD ["pm2-runtime", "/server/bin/www"]
+COPY . /app
+
+#prod
+#CMD ["pm2-runtime", "/app/server/bin/www"]
+#dev
+CMD ["nodemon", "/app/server/bin/www"]

@@ -24,7 +24,7 @@ app.use('/', express.static(path.join(__dirname, '../frontend/build')));
 //app.use(express.static('dist'));
 //app.use('/users', usersRouter);
 
-app.use('/test', (req, res) => res.send('hello'))
+app.use('/test', (req, res) => res.send('hello mr.'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
