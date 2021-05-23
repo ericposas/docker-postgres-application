@@ -20,3 +20,15 @@ services:
       POSTGRES_DB: ${PGSQL_DB}
     ports:
       - 5432:5432
+  postgres_gui:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 80:80
+    links:
+      - postgres
+    depends_on:
+      - postgres
+

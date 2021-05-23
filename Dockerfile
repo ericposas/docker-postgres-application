@@ -19,7 +19,7 @@ RUN npm i -g nodemon
 
 COPY . /app
 
-EXPOSE ${PGSQL_PORT}
+#EXPOSE ${PGSQL_PORT}
 
 #prod
 #CMD ["pm2-runtime", "/app/server/bin/www"]
