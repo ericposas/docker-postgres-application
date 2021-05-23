@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var { app, connectDB } = require('../app');
 var debug = require('debug')('code:server');
 var http = require('http');
 
@@ -82,9 +82,18 @@ function onError(error) {
  */
 
 function onListening() {
+  console.log('listening...');
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  setTimeout(async () => {
+    try {
+      await connectDB(),
+      console.log('Postgres connection successful!');
+    } catch (err) {
+      console.log('timeout occurred on Postgres connection');
+    }
+  }, 5000);
 }

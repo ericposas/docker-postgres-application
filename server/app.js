@@ -4,6 +4,36 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+require('dotenv').config();
+
+const { Client } = require('pg');
+
+const client = new Client({
+  connectionString: "postgresql://postgres:root@postgres:5432/db"
+}); // @postgres refers to docker internal mapping of postgres container address
+
+const connectDB = async () => {
+  try {
+    console.log('Connect to Postgres...');
+    client.connect();
+    await new Promise((resolve, reject) => {
+      client.query('Select now() as run_at;', (err, res) => {
+        if (err) {
+          console.log(err);
+          reject(err);
+        } else {
+          console.log(`Run at date-time : ${res.rows[0].run_at}`);
+          resolve(res.rows[0].run_at);
+        }
+      });
+    });
+    await client.end();
+    console.log('Execution Completed...');
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -42,4 +72,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+module.exports = {
+  connectDB,
+  app
+};

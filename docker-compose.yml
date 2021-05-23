@@ -3,6 +3,7 @@ version: "3.9"
 services:
   server:
     build: .
+    command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; nodemon /app/server/bin/www'
     ports:
       - 3000:3000
     volumes:
@@ -14,7 +15,8 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD}
+      POSTGRES_USER: ${PGSQL_USER}
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD}
+      POSTGRES_DB: ${PGSQL_DB}
     ports:
       - 5432:5432
