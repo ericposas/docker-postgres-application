@@ -4,6 +4,7 @@ services:
   server:
     build: .
     command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; nodemon /app/server/bin/www'
+    #production command: bash -c 'while !</dev/tcp/postgres/5432; do sleep 1; done; nodemon /app/server/bin/www'
     ports:
       - 3000:3000
     volumes:

@@ -90,10 +90,10 @@ function onListening() {
   debug('Listening on ' + bind);
   setTimeout(async () => {
     try {
-      await connectDB(),
+      await connectDB();
       console.log('Postgres connection successful!');
     } catch (err) {
       console.log('timeout occurred on Postgres connection');
     }
-  }, 5000);
+  }, 2500);
 }

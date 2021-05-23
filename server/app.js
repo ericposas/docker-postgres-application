@@ -12,6 +12,25 @@ const client = new Client({
   connectionString: "postgresql://postgres:root@postgres:5432/db"
 }); // @postgres refers to docker internal mapping of postgres container address
 
+const testQuery = async (server_res) => {
+  try {
+    await new Promise((resolve, reject) => {
+      client.query('select id,name,email from test_objects."People" order by id asc', (err, result) => {
+        if (!err) {
+          console.log(result.rows);
+          resolve(result.rows);
+          if (server_res) {
+            server_res.send(result.rows);
+          }
+        }
+        reject(err);
+      });
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 const connectDB = async () => {
   try {
     console.log('Connect to Postgres...');
@@ -27,17 +46,23 @@ const connectDB = async () => {
         }
       });
     });
-    await client.end();
-    console.log('Execution Completed...');
+    console.log('Execution Completed... executing test query next..');
+    await testQuery();
+    console.log('Something something complete..');
+    // await client.end();
   } catch (err) {
     throw new Error(err);
   }
 }
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
+
+app.use('/test_query', (req, res) => {
+  testQuery(res);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -68,5 +93,6 @@ app.use(function(err, req, res, next) {
 
 module.exports = {
   connectDB,
+  testQuery,
   app
 };
