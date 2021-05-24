@@ -1,16 +1,24 @@
 import pg from 'pg';
 import path from 'path';
 import express from 'express';
+import { Sequelize, Model, DataTypes } from 'sequelize';
+import random from 'random';
+import randomName from 'random-name';
+import Dog from './models/Dog';
 require('dotenv').config();
 
 // db
-const postgresCreds = {
-  user: process.env.PGSQL_USER,
-  host: process.env.PGSQL_USER,
-  database: process.env.PGSQL_DB,
-  password: process.env.PGSQL_PASSWORD,
-  port: process.env.PGSQL_PORT
-};
+const sequelize = new Sequelize(
+  process.env.PG_DB,
+  process.env.PG_USER,
+  process.env.PG_PASSWORD,
+  {
+    host: process.env.PG_USER,
+    port: 5432,
+    dialect: 'postgres',
+    logging: true
+  }
+);
 
 // express
 const app = express();
@@ -18,7 +26,32 @@ const port: number = 3000;
 
 app.use('/', express.static(path.join(__dirname, '../../frontend/dist')));
 
-app.listen(port, () => {
-  console.log(`Running on port ${port}`);
-  console.log(postgresCreds);
+const connectDB = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log(`Connected to db, running on port ${port}`);
+    console.log('getting dogs..');
+    try {
+      await Dog.create({ name: randomName.first(), age: random.int(1, 100) });
+      const dogs = await Dog.findAll({
+        raw: true,
+        limit: 5,
+        order: [['name', 'ASC']]
+      });
+      console.log('dogs: ', dogs);
+    } catch (err) {
+      console.log(err, 'error in findAll() query method');
+    }
+  } catch (err) {
+    console.log(err, 'trying connection again...');
+    setTimeout(connectDB, 2000);
+  }
+};
+
+app.listen(port, async () => {
+  try {
+    await connectDB();
+  } catch (err) {
+    console.log(err);
+  }
 });
