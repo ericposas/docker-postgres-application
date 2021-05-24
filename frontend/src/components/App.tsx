@@ -2,6 +2,6 @@ import * as React from 'react';
 
 export default () => (
     <div>
-        Some content
+        React content
     </div>
 );
