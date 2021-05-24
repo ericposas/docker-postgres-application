@@ -26,22 +26,41 @@ const port: number = 3000;
 
 app.use('/', express.static(path.join(__dirname, '../../frontend/dist')));
 
+const createTestTable = async () => {
+  try {
+    console.log('try and create table..');
+    await sequelize.query(`
+      CREATE TABLE IF NOT EXISTS beans (
+        id  SERIAL  PRIMARY KEY NOT NULL,
+        name  TEXT  NOT NULL
+      )
+    `);
+  } catch (err) {
+    console.log('error creating table thru sequelize');
+  }
+};
+
+const getDogs = async () => {
+  try {
+    console.log('try getting dogs..');
+    await Dog.create({ name: randomName.first(), age: random.int(1, 100) });
+    const dogs = await Dog.findAll({
+      raw: true,
+      limit: 5,
+      order: [['name', 'ASC']]
+    });
+    console.log('dogs: ', dogs);
+  } catch (err) {
+    console.log(err, 'error in findAll() query method');
+  }
+};
+
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log(`Connected to db, running on port ${port}`);
-    console.log('getting dogs..');
-    try {
-      await Dog.create({ name: randomName.first(), age: random.int(1, 100) });
-      const dogs = await Dog.findAll({
-        raw: true,
-        limit: 5,
-        order: [['name', 'ASC']]
-      });
-      console.log('dogs: ', dogs);
-    } catch (err) {
-      console.log(err, 'error in findAll() query method');
-    }
+    await getDogs();
+    await createTestTable();
   } catch (err) {
     console.log(err, 'trying connection again...');
     setTimeout(connectDB, 2000);

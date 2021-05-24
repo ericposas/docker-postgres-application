@@ -30,23 +30,41 @@ const sequelize = new sequelize_1.Sequelize(process.env.PG_DB, process.env.PG_US
 const app = express_1.default();
 const port = 3000;
 app.use('/', express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
+const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log('try and create table..');
+        yield sequelize.query(`
+      CREATE TABLE IF NOT EXISTS beans (
+        id  SERIAL  PRIMARY KEY NOT NULL,
+        name  TEXT  NOT NULL
+      )
+    `);
+    }
+    catch (err) {
+        console.log('error creating table thru sequelize');
+    }
+});
+const getDogs = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log('try getting dogs..');
+        yield Dog_1.default.create({ name: random_name_1.default.first(), age: random_1.default.int(1, 100) });
+        const dogs = yield Dog_1.default.findAll({
+            raw: true,
+            limit: 5,
+            order: [['name', 'ASC']]
+        });
+        console.log('dogs: ', dogs);
+    }
+    catch (err) {
+        console.log(err, 'error in findAll() query method');
+    }
+});
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield sequelize.authenticate();
         console.log(`Connected to db, running on port ${port}`);
-        console.log('getting dogs..');
-        try {
-            yield Dog_1.default.create({ name: random_name_1.default.first(), age: random_1.default.int(1, 100) });
-            const dogs = yield Dog_1.default.findAll({
-                raw: true,
-                limit: 5,
-                order: [['name', 'ASC']]
-            });
-            console.log('dogs: ', dogs);
-        }
-        catch (err) {
-            console.log(err, 'error in findAll() query method');
-        }
+        yield getDogs();
+        yield createTestTable();
     }
     catch (err) {
         console.log(err, 'trying connection again...');
