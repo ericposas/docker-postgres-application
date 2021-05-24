@@ -1,4 +1,3 @@
-import pg from 'pg';
 import path from 'path';
 import express from 'express';
 import { Sequelize, Model, DataTypes } from 'sequelize';
