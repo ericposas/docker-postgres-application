@@ -1,25 +1,11 @@
+require('dotenv').config();
 import path from 'path';
 import express from 'express';
-import { Sequelize, Model, DataTypes } from 'sequelize';
 import random from 'random';
 import randomName from 'random-name';
 import Dog from './models/Dog';
-require('dotenv').config();
+import { sequelize } from './db';
 
-// db
-const sequelize = new Sequelize(
-  process.env.PG_DB,
-  process.env.PG_USER,
-  process.env.PG_PASSWORD,
-  {
-    host: process.env.PG_USER,
-    port: 5432,
-    dialect: 'postgres',
-    logging: true
-  }
-);
-
-// express
 const app = express();
 const port: number = 3000;
 

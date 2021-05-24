@@ -1,17 +1,5 @@
-require('dotenv').config();
-import { Sequelize, Model, DataTypes } from 'sequelize';
-
-const sequelize = new Sequelize(
-  process.env.PG_DB,
-  process.env.PG_USER,
-  process.env.PG_PASSWORD,
-  {
-    host: 'postgres',
-    port: 5432,
-    dialect: 'postgres',
-    logging: true
-  }
-);
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from '../db';
 
 export default class Dog extends Model {}
 
@@ -31,7 +19,6 @@ Dog.init(
   {
     sequelize,
     modelName: 'dog',
-    tableName: 'dogs',
     timestamps: false
   }
 );

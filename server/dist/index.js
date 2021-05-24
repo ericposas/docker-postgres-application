@@ -12,28 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require('dotenv').config();
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
-const sequelize_1 = require("sequelize");
 const random_1 = __importDefault(require("random"));
 const random_name_1 = __importDefault(require("random-name"));
 const Dog_1 = __importDefault(require("./models/Dog"));
-require('dotenv').config();
-// db
-const sequelize = new sequelize_1.Sequelize(process.env.PG_DB, process.env.PG_USER, process.env.PG_PASSWORD, {
-    host: process.env.PG_USER,
-    port: 5432,
-    dialect: 'postgres',
-    logging: true
-});
-// express
+const db_1 = require("./db");
 const app = express_1.default();
 const port = 3000;
 app.use('/', express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
 const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('try and create table..');
-        yield sequelize.query(`
+        yield db_1.sequelize.query(`
       CREATE TABLE IF NOT EXISTS beans (
         id  SERIAL  PRIMARY KEY NOT NULL,
         name  TEXT  NOT NULL
@@ -61,7 +53,7 @@ const getDogs = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield sequelize.authenticate();
+        yield db_1.sequelize.authenticate();
         console.log(`Connected to db, running on port ${port}`);
         yield getDogs();
         yield createTestTable();
