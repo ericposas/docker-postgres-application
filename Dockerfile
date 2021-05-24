@@ -23,10 +23,3 @@ RUN apt update
 RUN apt install --no-install-recommends yarn
 
 COPY . /app
-
-#EXPOSE ${PGSQL_PORT}
-
-#prod
-#CMD ["pm2-runtime", "/app/server/bin/www"]
-#dev
-#CMD ["nodemon", "/app/server/bin/www"]
