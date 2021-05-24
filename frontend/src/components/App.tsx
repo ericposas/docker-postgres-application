@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 
-export default () => (
-    <div>
-        React content
-    </div>
+const App = (): React.ReactElement => (
+  <div>Rendering React content on Docker</div>
 );
+
+export default App;
