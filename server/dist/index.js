@@ -17,6 +17,7 @@ const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 const random_1 = __importDefault(require("random"));
 const random_name_1 = __importDefault(require("random-name"));
+const dog_breeds_1 = __importDefault(require("dog-breeds"));
 const Dog_1 = __importDefault(require("./models/Dog"));
 const db_1 = require("./db");
 const app = express_1.default();
@@ -24,11 +25,17 @@ const port = 3000;
 app.use('/', express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
 const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        // console.log('try and drop tables..');
+        // await sequelize.query(`
+        //   DROP TABLE IF EXISTS dogs
+        // `);
         console.log('try and create table..');
         yield db_1.sequelize.query(`
-      CREATE TABLE IF NOT EXISTS beans (
+      CREATE TABLE IF NOT EXISTS dogs (
         id  SERIAL  PRIMARY KEY NOT NULL,
-        name  TEXT  NOT NULL
+        name  TEXT  NOT NULL,
+        age  INTEGER  NOT NULL,
+        breed  TEXT
       )
     `);
     }
@@ -39,7 +46,13 @@ const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
 const getDogs = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('try getting dogs..');
-        yield Dog_1.default.create({ name: random_name_1.default.first(), age: random_1.default.int(1, 100) });
+        const breed = dog_breeds_1.default.random();
+        const doggie = {
+            name: random_name_1.default.first(),
+            age: random_1.default.int(1, 100),
+            breed: breed.name
+        };
+        yield Dog_1.default.create(doggie);
         const dogs = yield Dog_1.default.findAll({
             raw: true,
             limit: 5,
@@ -55,8 +68,8 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield db_1.sequelize.authenticate();
         console.log(`Connected to db, running on port ${port}`);
-        yield getDogs();
         yield createTestTable();
+        yield getDogs();
     }
     catch (err) {
         console.log(err, 'trying connection again...');

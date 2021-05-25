@@ -1,4 +1,5 @@
 {
+  "name": "app",
   "main": "dist/bundle.js",
   "license": "MIT",
   "scripts": {

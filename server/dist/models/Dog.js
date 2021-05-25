@@ -15,6 +15,10 @@ Dog.init({
         type: sequelize_1.DataTypes.INTEGER,
         unique: true,
         allowNull: false
+    },
+    breed: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: true
     }
 }, {
     sequelize: db_1.sequelize,

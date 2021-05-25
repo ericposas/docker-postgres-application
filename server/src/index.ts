@@ -3,6 +3,7 @@ import path from 'path';
 import express from 'express';
 import random from 'random';
 import randomName from 'random-name';
+import randomBreed from 'dog-breeds';
 import Dog from './models/Dog';
 import { sequelize } from './db';
 
@@ -13,11 +14,17 @@ app.use('/', express.static(path.join(__dirname, '../../frontend/dist')));
 
 const createTestTable = async () => {
   try {
+    // console.log('try and drop tables..');
+    // await sequelize.query(`
+    //   DROP TABLE IF EXISTS dogs
+    // `);
     console.log('try and create table..');
     await sequelize.query(`
-      CREATE TABLE IF NOT EXISTS beans (
+      CREATE TABLE IF NOT EXISTS dogs (
         id  SERIAL  PRIMARY KEY NOT NULL,
-        name  TEXT  NOT NULL
+        name  TEXT  NOT NULL,
+        age  INTEGER  NOT NULL,
+        breed  TEXT
       )
     `);
   } catch (err) {
@@ -28,7 +35,13 @@ const createTestTable = async () => {
 const getDogs = async () => {
   try {
     console.log('try getting dogs..');
-    await Dog.create({ name: randomName.first(), age: random.int(1, 100) });
+    const breed: Breed = randomBreed.random();
+    const doggie: Doggie = {
+      name: randomName.first(),
+      age: random.int(1, 100),
+      breed: breed.name
+    };
+    await Dog.create(doggie);
     const dogs = await Dog.findAll({
       raw: true,
       limit: 5,
@@ -44,8 +57,8 @@ const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log(`Connected to db, running on port ${port}`);
-    await getDogs();
     await createTestTable();
+    await getDogs();
   } catch (err) {
     console.log(err, 'trying connection again...');
     setTimeout(connectDB, 2000);

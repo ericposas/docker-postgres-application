@@ -14,6 +14,10 @@ Dog.init(
       type: DataTypes.INTEGER,
       unique: true,
       allowNull: false
+    },
+    breed: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   },
   {
