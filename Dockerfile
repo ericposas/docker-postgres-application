@@ -11,8 +11,8 @@ RUN apt-get upgrade
 RUN apt-get update
 RUN npm install -g npm@7.14.0 --loglevel=error
 RUN adduser --no-create-home --system --group --shell /bin/false nginx
-COPY ./nginx-forward-conf /etc/nginx/sites-available/default
-COPY ./nginx-forward-conf /etc/nginx/sites-enabled/default
+COPY ./nginx-forward.conf /etc/nginx/sites-available/default
+COPY ./nginx-forward.conf /etc/nginx/sites-enabled/default
 RUN service nginx restart
 RUN npm i -g pm2
 RUN npm i -g nodemon
