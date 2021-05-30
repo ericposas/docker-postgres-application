@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = exports.deleteDags = exports.getDags = void 0;
+exports.createDog = exports.deleteSingleDag = exports.deleteDags = exports.getDags = void 0;
 const random_1 = __importDefault(require("random"));
 const random_name_1 = __importDefault(require("random-name"));
 const dog_breeds_1 = __importDefault(require("dog-breeds"));
@@ -56,6 +56,26 @@ const deleteDags = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteDags = deleteDags;
+const deleteSingleDag = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let { id } = req.params;
+        console.log('deleting a single dag from the database...');
+        yield Dog_1.default.destroy({
+            where: {
+                id
+            }
+        });
+        return res.status(200).json({
+            success: true,
+            message: `deleted daggie at id ${id}`,
+            dogs: yield Dog_1.default.findAll({ raw: true, order: [['id', 'asc']] })
+        });
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+exports.deleteSingleDag = deleteSingleDag;
 const getDags = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const dogs = yield Dog_1.default.findAll({

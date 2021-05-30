@@ -41,6 +41,25 @@ const deleteDags = async (req: Request, res: Response) => {
   }
 };
 
+const deleteSingleDag = async (req: Request, res: Response) => {
+  try {
+    let { id } = req.params;
+    console.log('deleting a single dag from the database...');
+    await Dog.destroy({
+      where: {
+        id
+      }
+    });
+    return res.status(200).json({
+      success: true,
+      message: `deleted daggie at id ${id}`,
+      dogs: await Dog.findAll({ raw: true, order: [['id', 'asc']] })
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const getDags = async (req: Request, res: Response) => {
   try {
     const dogs = await Dog.findAll({
@@ -59,4 +78,4 @@ const getDags = async (req: Request, res: Response) => {
   }
 };
 
-export { getDags, deleteDags, createDog };
+export { getDags, deleteDags, deleteSingleDag, createDog };

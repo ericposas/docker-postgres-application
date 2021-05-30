@@ -1,7 +1,8 @@
 import * as React from "react";
 import { motion } from 'framer-motion';
+import TrashIcon from './TrashIcon';
 import { Dag } from '../types/Dags';
-import { getDags, addDag, deleteDags } from './frontendCrud';
+import { getDags, addDag, deleteDags, deleteSingleDag } from './frontendCrud';
 
 const dummyData = [{
       id: 0,
@@ -107,27 +108,36 @@ const App = ({}) => {
             <thead>
               <tr className="
               text-left font-bold
-              bg-yellow-600 text-white
+              bg-yellow-800 text-white
             ">
                 <th>Name</th>
                 <th>Breed</th>
               </tr>
             </thead>
             <tbody
-            className="
+            className={`
             text-left
-            bg-yellow-200
-            text-yellow-800
-            ">
+            text-yellow-200
+            `}>
               {dags &&
                 dags.map((dag) => (
                   <motion.tr
                   key={dag.id}
-                  className="p-10"
                   {...motionTRow}
+                  className="
+                  hover:bg-yellow-400
+                  hover:text-yellow-800
+                  transition cursor-pointer
+                  "
                   >
                     <td>{dag.name}</td>
                     <td>{dag.breed}</td>
+                    <td onClick={() => deleteSingleDag(setDags, dag.id)}>
+                      <TrashIcon
+                      width={15}
+                      color={'brown'}
+                      />
+                    </td>
                   </motion.tr>
                 ))}
             </tbody>

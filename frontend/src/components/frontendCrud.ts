@@ -6,6 +6,15 @@ interface SetDags {
   (dags: Dag[]): void;
 }
 
+const deleteSingleDag = async (setDags: SetDags, idToDel: number): Promise<void> => {
+  try {
+    const _dag: AxiosResponse<{success:string;message:string;dog:Dag,dogs:Dag[]}> = 
+      await axios.delete(`${apiBase}/breeds/${idToDel}`);
+    setDags(_dag.data.dogs);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const addDag = async (setDags: SetDags): Promise<void> => {
     try {
       const _dag: AxiosResponse<{success:string;message:string;dog:Dag;dogs:Dag[]}> =
@@ -40,5 +49,6 @@ const deleteDags = async (setDags: SetDags): Promise<void> => {
 export {
     addDag,
     getDags,
-    deleteDags
+    deleteDags,
+    deleteSingleDag
 }
