@@ -67,61 +67,50 @@ const App = ({}) => {
   return (
     <>
       <div
-      style={{ textAlign: 'center', margin: '25px 0 0 0' }}
+      className="text-center max-w-xs mx-auto mt-8"
       >
-        {/* <h1
-        style={{ display: 'inline' }}
-        >You like Dags?</h1> */}
         <img
-        style={{ width: '250px' }}
+        className="rounded-md select-none"
         src="https://i.redd.it/k1bvnwiox7l31.jpg"></img>
         <br />
         <button
         onClick={addDag}
-        style={{ 
-          display: 'inline',
-          margin: '0 0 0 20px'
-        }}>Add a Dag</button>
+        className="btn-blue ml-4"
+        >Add a Dag</button>
         <button
         onClick={deleteDags}
-        style={{ 
-          display: 'inline',
-          margin: '0 0 0 20px'
-        }}>Remove All Dags</button>
+        className="btn-blue-md"
+        >Remove All Dags</button>
       </div>
-      <br />
-      <br />
       {
         dags.length > 0 ?
         <table
-        style={{
-          textAlign: 'left',
-          padding: '10px 40px 10px 40px',
-          margin: 'auto',
-          border: '2px dotted grey'
-          }}>
+        className="
+        rounded-lg
+        mt-10 text-center mx-auto
+        table-auto w-8/12
+        "
+        >
           <thead>
-            <tr style={{}}>
+            <tr className="bg-blue-500 text-white">
               <th>Name</th>
-              {/* <th>Age</th> */}
               <th>Breed</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="bg-blue-200 text-blue-500">
             {dags &&
               dags.map((dag) => (
-                <tr key={dag.id}>
+                <tr
+                key={dag.id}
+                >
                   <td>{dag.name}</td>
-                  {/* <td>{dag.age}</td> */}
                   <td>{dag.breed}</td>
                 </tr>
               ))}
           </tbody>
         </table>
         : <div
-            style={{
-              textAlign: 'center'
-            }}
+          className="text-center mt-10 text-lg"
           >No daggies!</div>
       }
     </>

@@ -21,5 +21,7 @@
   "editor.formatOnSave": true,
   "eslint.options": {
     "ignorePattern": ["*.config.js"]
-  }
+  },
+  "css.validate": false, // Disable css built-in lint
+  "stylelint.enable": true // Enable sytlelint
 }

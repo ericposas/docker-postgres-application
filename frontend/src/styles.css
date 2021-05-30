@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-blue {
+  @apply w-24;
+  @apply h-12;
+  @apply hover:bg-blue-400 mr-6 rounded;
+  @apply shadow-md bg-blue-600 text-white;
+  @apply border-gray-600;
+  @apply transition transform hover:scale-110;
+}
+
+.btn-blue-md {
+  @apply w-36;
+  @apply h-12;
+  @apply hover:bg-blue-400 mr-6 rounded;
+  @apply shadow-md bg-blue-600 text-white;
+  @apply border-gray-600;
+  @apply transition transform hover:scale-110;
+}
