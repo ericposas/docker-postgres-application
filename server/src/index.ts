@@ -1,6 +1,7 @@
 require('dotenv').config();
 import path from 'path';
 import express from 'express';
+import cors from 'cors';
 import { sequelize } from './db';
 import breedsRouter from './routes/breeds';
 
@@ -8,6 +9,7 @@ const app = express();
 const apiBase = '/api/v1';
 const port: number = process.env.API_PORT as unknown as number;
 
+app.use(cors());
 app.use('/', express.static(path.join(__dirname, '../../frontend/dist')));
 app.use(`${apiBase}/breeds`, breedsRouter);
 

@@ -12,14 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDags = void 0;
+exports.createDog = exports.deleteDags = exports.getDags = void 0;
 const random_1 = __importDefault(require("random"));
 const random_name_1 = __importDefault(require("random-name"));
 const dog_breeds_1 = __importDefault(require("dog-breeds"));
 const Dog_1 = __importDefault(require("../models/Dog"));
-const getDogs = () => __awaiter(void 0, void 0, void 0, function* () {
+const createDog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('try getting dogs..');
         const breed = dog_breeds_1.default.random();
         const doggie = {
             name: random_name_1.default.first(),
@@ -27,21 +26,44 @@ const getDogs = () => __awaiter(void 0, void 0, void 0, function* () {
             breed: breed.name
         };
         yield Dog_1.default.create(doggie);
+        return res.status(200).json({
+            success: true,
+            message: 'created a dag',
+            dogs: yield Dog_1.default.findAll({ raw: true, order: [['id', 'asc']] }),
+            dog: doggie
+        });
+    }
+    catch (err) {
+        console.log(err, 'error creating a new dag');
+    }
+});
+exports.createDog = createDog;
+const deleteDags = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log('deleting all dogs from the database..');
+        yield Dog_1.default.destroy({
+            where: {},
+            truncate: true
+        });
+        return res.status(200).json({
+            success: true,
+            message: 'deleted all dags from database',
+            dogs: yield Dog_1.default.findAll({ raw: true, order: [['id', 'asc']] })
+        });
+    }
+    catch (err) {
+        console.log(err, 'error occurred deleting dags');
+    }
+});
+exports.deleteDags = deleteDags;
+const getDags = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
         const dogs = yield Dog_1.default.findAll({
             // limit: 5,
             raw: true,
             order: [['id', 'ASC']]
         });
         console.log('dogs: ', dogs);
-        return dogs;
-    }
-    catch (err) {
-        console.log(err, 'error in findAll() query method');
-    }
-});
-const getDags = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const dogs = yield getDogs();
         return res.status(200).json({
             success: true,
             message: 'retrieved dags',

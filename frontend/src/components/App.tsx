@@ -30,31 +30,67 @@ const App = ({}) => {
       breed: "wheenie",
     },
   ]);
+  const addDag = async (): Promise<void> => {
+    try {
+      const _dag: AxiosResponse<{success:string;message:string;dog:Dag;dogs:Dag[]}> =
+        await axios.post(`${apiBase}/breeds`);
+      setDags(_dag.data.dogs);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const getDags = async (): Promise<void> => {
+    try {
+      const _dags: AxiosResponse<DagResponse> = await axios.get(
+        `${apiBase}/breeds`
+      );
+      console.log(_dags);
+      setDags(_dags.data.dogs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const deleteDags = async (): Promise<void> => {
+    try {
+      const _delete: AxiosResponse<DagResponse> = await axios.delete(
+        `${apiBase}/breeds`
+      );
+      setDags(_delete.data.dogs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   React.useEffect(() => {
-    const getDags = async () => {
-      try {
-        const _dags: AxiosResponse<DagResponse> = await axios.get(
-          `${apiBase}/breeds`
-        );
-        console.log(_dags);
-
-        setDags(_dags.data.dogs);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     getDags();
   }, []);
 
   return (
     <>
+      <div>
+        <h1
+        style={{ display: 'inline' }}
+        >You like Dags?</h1>
+        <button
+        onClick={addDag}
+        style={{ 
+          display: 'inline',
+          margin: '0 0 0 20px'
+        }}>Add a Dag</button>
+        <button
+        onClick={deleteDags}
+        style={{ 
+          display: 'inline',
+          margin: '0 0 0 20px'
+        }}>Remove All Dags</button>
+      </div>
+      <br />
       <br />
       <table>
         <thead>
           <tr style={{ textAlign: "left" }}>
-            <th>name</th>
-            <th>age</th>
-            <th>breed</th>
+            <th>Name</th>
+            {/* <th>Age</th> */}
+            <th>Breed</th>
           </tr>
         </thead>
         <tbody>
@@ -62,7 +98,7 @@ const App = ({}) => {
             dags.map((dag) => (
               <tr key={dag.id}>
                 <td>{dag.name}</td>
-                <td>{dag.age}</td>
+                {/* <td>{dag.age}</td> */}
                 <td>{dag.breed}</td>
               </tr>
             ))}

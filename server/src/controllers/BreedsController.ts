@@ -4,9 +4,8 @@ import randomBreed from 'dog-breeds';
 import Dog from '../models/Dog';
 import { Request, Response } from 'express';
 
-const getDogs = async () => {
+const createDog = async (req: Request, res: Response) => {
   try {
-    console.log('try getting dogs..');
     const breed: Breed = randomBreed.random();
     const doggie: Doggie = {
       name: randomName.first(),
@@ -14,21 +13,42 @@ const getDogs = async () => {
       breed: breed.name
     };
     await Dog.create(doggie);
+    return res.status(200).json({
+      success: true,
+      message: 'created a dag',
+      dogs: await Dog.findAll({ raw: true, order: [['id', 'asc']] }),
+      dog: doggie
+    });
+  } catch (err) {
+    console.log(err, 'error creating a new dag');
+  }
+};
+
+const deleteDags = async (req: Request, res: Response) => {
+  try {
+    console.log('deleting all dogs from the database..');
+    await Dog.destroy({
+      where: {},
+      truncate: true
+    });
+    return res.status(200).json({
+      success: true,
+      message: 'deleted all dags from database',
+      dogs: await Dog.findAll({ raw: true, order: [['id', 'asc']] })
+    });
+  } catch (err) {
+    console.log(err, 'error occurred deleting dags');
+  }
+};
+
+const getDags = async (req: Request, res: Response) => {
+  try {
     const dogs = await Dog.findAll({
       // limit: 5,
       raw: true,
       order: [['id', 'ASC']]
     });
     console.log('dogs: ', dogs);
-    return dogs;
-  } catch (err) {
-    console.log(err, 'error in findAll() query method');
-  }
-};
-
-const getDags = async (req: Request, res: Response) => {
-  try {
-    const dogs = await getDogs();
     return res.status(200).json({
       success: true,
       message: 'retrieved dags',
@@ -39,4 +59,4 @@ const getDags = async (req: Request, res: Response) => {
   }
 };
 
-export { getDags };
+export { getDags, deleteDags, createDog };

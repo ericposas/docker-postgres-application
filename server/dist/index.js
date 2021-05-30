@@ -15,11 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const db_1 = require("./db");
 const breeds_1 = __importDefault(require("./routes/breeds"));
 const app = express_1.default();
 const apiBase = '/api/v1';
 const port = process.env.API_PORT;
+app.use(cors_1.default());
 app.use('/', express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
 app.use(`${apiBase}/breeds`, breeds_1.default);
 const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
