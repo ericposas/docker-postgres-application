@@ -7,7 +7,6 @@
   @apply h-12;
   @apply hover:bg-yellow-400 mr-6 rounded;
   @apply shadow-md bg-yellow-600 text-white;
-  @apply transition transform hover:scale-110;
 }
 
 .btn-blue-md {
@@ -15,5 +14,4 @@
   @apply h-12;
   @apply hover:bg-yellow-400 mr-6 rounded;
   @apply shadow-md bg-yellow-600 text-white;
-  @apply transition transform hover:scale-110;
 }
