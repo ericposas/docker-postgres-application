@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "@babel/core": "^7.14.3",
+    "@types/axios": "^0.14.0",
     "@types/react": "^17.0.6",
+    "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
+    "dotenv-webpack": "^7.0.2",
+    "os-browserify": "^0.3.0",
     "react": "^17.0.2",
     "ts-loader": "^9.2.2",
     "typescript": "^4.2.4",

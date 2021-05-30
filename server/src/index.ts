@@ -1,23 +1,18 @@
 require('dotenv').config();
 import path from 'path';
 import express from 'express';
-import random from 'random';
-import randomName from 'random-name';
-import randomBreed from 'dog-breeds';
-import Dog from './models/Dog';
 import { sequelize } from './db';
+import breedsRouter from './routes/breeds';
 
 const app = express();
-const port: number = 3000;
+const apiBase = '/api/v1';
+const port: number = process.env.API_PORT as unknown as number;
 
 app.use('/', express.static(path.join(__dirname, '../../frontend/dist')));
+app.use(`${apiBase}/breeds`, breedsRouter);
 
 const createTestTable = async () => {
   try {
-    // console.log('try and drop tables..');
-    // await sequelize.query(`
-    //   DROP TABLE IF EXISTS dogs
-    // `);
     console.log('try and create table..');
     await sequelize.query(`
       CREATE TABLE IF NOT EXISTS dogs (
@@ -32,33 +27,12 @@ const createTestTable = async () => {
   }
 };
 
-const getDogs = async () => {
-  try {
-    console.log('try getting dogs..');
-    const breed: Breed = randomBreed.random();
-    const doggie: Doggie = {
-      name: randomName.first(),
-      age: random.int(1, 100),
-      breed: breed.name
-    };
-    await Dog.create(doggie);
-    const dogs = await Dog.findAll({
-      raw: true,
-      limit: 5,
-      order: [['name', 'ASC']]
-    });
-    console.log('dogs: ', dogs);
-  } catch (err) {
-    console.log(err, 'error in findAll() query method');
-  }
-};
-
 const connectDB = async () => {
   try {
     await sequelize.authenticate();
     console.log(`Connected to db, running on port ${port}`);
     await createTestTable();
-    await getDogs();
+    // await getDogs();
   } catch (err) {
     console.log(err, 'trying connection again...');
     setTimeout(connectDB, 2000);

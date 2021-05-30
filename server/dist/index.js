@@ -15,20 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
-const random_1 = __importDefault(require("random"));
-const random_name_1 = __importDefault(require("random-name"));
-const dog_breeds_1 = __importDefault(require("dog-breeds"));
-const Dog_1 = __importDefault(require("./models/Dog"));
 const db_1 = require("./db");
+const breeds_1 = __importDefault(require("./routes/breeds"));
 const app = express_1.default();
-const port = 3000;
+const apiBase = '/api/v1';
+const port = process.env.API_PORT;
 app.use('/', express_1.default.static(path_1.default.join(__dirname, '../../frontend/dist')));
+app.use(`${apiBase}/breeds`, breeds_1.default);
 const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // console.log('try and drop tables..');
-        // await sequelize.query(`
-        //   DROP TABLE IF EXISTS dogs
-        // `);
         console.log('try and create table..');
         yield db_1.sequelize.query(`
       CREATE TABLE IF NOT EXISTS dogs (
@@ -43,33 +38,12 @@ const createTestTable = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log('error creating table thru sequelize');
     }
 });
-const getDogs = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        console.log('try getting dogs..');
-        const breed = dog_breeds_1.default.random();
-        const doggie = {
-            name: random_name_1.default.first(),
-            age: random_1.default.int(1, 100),
-            breed: breed.name
-        };
-        yield Dog_1.default.create(doggie);
-        const dogs = yield Dog_1.default.findAll({
-            raw: true,
-            limit: 5,
-            order: [['name', 'ASC']]
-        });
-        console.log('dogs: ', dogs);
-    }
-    catch (err) {
-        console.log(err, 'error in findAll() query method');
-    }
-});
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield db_1.sequelize.authenticate();
         console.log(`Connected to db, running on port ${port}`);
         yield createTestTable();
-        yield getDogs();
+        // await getDogs();
     }
     catch (err) {
         console.log(err, 'trying connection again...');
