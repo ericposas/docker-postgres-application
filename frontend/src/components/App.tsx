@@ -1,23 +1,8 @@
 import * as React from "react";
-import axios, { AxiosResponse } from "axios";
+import { Dag } from '../types/Dags';
+import { getDags, addDag, deleteDags } from './frontendCrud';
 
-const apiBase = `http://localhost:${process.env.API_PORT}/api/v1`;
-
-interface Dag {
-  id: number;
-  name: string;
-  age: number;
-  breed: string;
-}
-interface DagResponse {
-  success: boolean;
-  message: string;
-  dogs: Dag[];
-}
-
-const App = ({}) => {
-  const [dags, setDags] = React.useState<Dag[]>([
-    {
+const dummyData = [{
       id: 0,
       name: "borky",
       age: 32,
@@ -29,56 +14,36 @@ const App = ({}) => {
       age: 12,
       breed: "wheenie",
     },
-  ]);
-  const addDag = async (): Promise<void> => {
-    try {
-      const _dag: AxiosResponse<{success:string;message:string;dog:Dag;dogs:Dag[]}> =
-        await axios.post(`${apiBase}/breeds`);
-      setDags(_dag.data.dogs);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  const getDags = async (): Promise<void> => {
-    try {
-      const _dags: AxiosResponse<DagResponse> = await axios.get(
-        `${apiBase}/breeds`
-      );
-      console.log(_dags);
-      setDags(_dags.data.dogs);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const deleteDags = async (): Promise<void> => {
-    try {
-      const _delete: AxiosResponse<DagResponse> = await axios.delete(
-        `${apiBase}/breeds`
-      );
-      setDags(_delete.data.dogs);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+];
+
+const App = ({}) => {
+  const [dags, setDags] = React.useState<Dag[]>(dummyData);
+  
   React.useEffect(() => {
-    getDags();
+    getDags(setDags);
   }, []);
 
   return (
     <>
       <div
-      className="text-center max-w-xs mx-auto mt-8"
+      className="
+      text-center max-w-xs
+      mx-auto mt-8
+      "
       >
         <img
-        className="rounded-md select-none"
+        className="
+        filter drop-shadow-xl
+        rounded-md select-none
+        "
         src="https://i.redd.it/k1bvnwiox7l31.jpg"></img>
         <br />
         <button
-        onClick={addDag}
+        onClick={() => addDag(setDags)}
         className="btn-blue ml-4"
         >Add a Dag</button>
         <button
-        onClick={deleteDags}
+        onClick={() => deleteDags(setDags)}
         className="btn-blue-md"
         >Remove All Dags</button>
       </div>
@@ -86,18 +51,18 @@ const App = ({}) => {
         dags.length > 0 ?
         <table
         className="
-        rounded-lg
+        rounded
         mt-10 text-center mx-auto
         table-auto w-8/12
         "
         >
           <thead>
-            <tr className="bg-blue-500 text-white">
+            <tr className="font-bold bg-yellow-500 text-white">
               <th>Name</th>
               <th>Breed</th>
             </tr>
           </thead>
-          <tbody className="bg-blue-200 text-blue-500">
+          <tbody className="bg-yellow-200 text-yellow-800">
             {dags &&
               dags.map((dag) => (
                 <tr
@@ -110,7 +75,7 @@ const App = ({}) => {
           </tbody>
         </table>
         : <div
-          className="text-center mt-10 text-lg"
+          className="text-center mt-10 text-lg text-white"
           >No daggies!</div>
       }
     </>

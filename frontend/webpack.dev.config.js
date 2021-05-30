@@ -12,7 +12,7 @@ module.exports = {
   entry: "./src/index.tsx",
   devtool: "source-map",
   resolve: {
-    extensions: [".js", ".tsx"],
+    extensions: [".js", ".ts", ".tsx"],
     modules: [
       path.resolve(__dirname, "src"),
       path.resolve(__dirname, "node_modules"),
@@ -25,7 +25,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx$/,
+        test: /\.(ts|tsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "ts-loader",
       },
