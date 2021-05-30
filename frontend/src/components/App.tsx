@@ -66,10 +66,16 @@ const App = ({}) => {
 
   return (
     <>
-      <div>
-        <h1
+      <div
+      style={{ textAlign: 'center', margin: '25px 0 0 0' }}
+      >
+        {/* <h1
         style={{ display: 'inline' }}
-        >You like Dags?</h1>
+        >You like Dags?</h1> */}
+        <img
+        style={{ width: '250px' }}
+        src="https://i.redd.it/k1bvnwiox7l31.jpg"></img>
+        <br />
         <button
         onClick={addDag}
         style={{ 
@@ -85,25 +91,39 @@ const App = ({}) => {
       </div>
       <br />
       <br />
-      <table>
-        <thead>
-          <tr style={{ textAlign: "left" }}>
-            <th>Name</th>
-            {/* <th>Age</th> */}
-            <th>Breed</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dags &&
-            dags.map((dag) => (
-              <tr key={dag.id}>
-                <td>{dag.name}</td>
-                {/* <td>{dag.age}</td> */}
-                <td>{dag.breed}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {
+        dags.length > 0 ?
+        <table
+        style={{
+          textAlign: 'left',
+          padding: '10px 40px 10px 40px',
+          margin: 'auto',
+          border: '2px dotted grey'
+          }}>
+          <thead>
+            <tr style={{}}>
+              <th>Name</th>
+              {/* <th>Age</th> */}
+              <th>Breed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dags &&
+              dags.map((dag) => (
+                <tr key={dag.id}>
+                  <td>{dag.name}</td>
+                  {/* <td>{dag.age}</td> */}
+                  <td>{dag.breed}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        : <div
+            style={{
+              textAlign: 'center'
+            }}
+          >No daggies!</div>
+      }
     </>
   );
 };
