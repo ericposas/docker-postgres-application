@@ -2,7 +2,6 @@ const path = require("path");
 const webpack = require("webpack");
 const htmlPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-// const Dotenv = require("dotenv-webpack");
 const dotenv = require("dotenv").config({
   path: path.join(__dirname, ".env"),
 });
@@ -36,7 +35,6 @@ module.exports = {
     ],
   },
   plugins: [
-    // new Dotenv(),
     new webpack.DefinePlugin({
       "process.env": dotenv.parsed,
     }),
