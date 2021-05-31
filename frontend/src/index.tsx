@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import App from "./components/App";
-import './styles.css';
+import "./styles.css";
 
 export const apiBase = `http://localhost:${process.env.API_PORT}/api/v1`;
 

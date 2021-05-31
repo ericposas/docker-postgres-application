@@ -1,29 +1,40 @@
-import { apiBase } from '../index';
-import axios, { AxiosResponse } from 'axios';
-import { Dag, DagResponse } from '../types/Dags';
+import { apiBase } from "../index";
+import axios, { AxiosResponse } from "axios";
+import { Dag, DagResponse } from "../types/Dags";
 
 interface SetDags {
   (dags: Dag[]): void;
 }
 
-const deleteSingleDag = async (setDags: SetDags, idToDel: number): Promise<void> => {
+const deleteSingleDag = async (
+  setDags: SetDags,
+  idToDel: number
+): Promise<void> => {
   try {
-    const _dag: AxiosResponse<{success:string;message:string;dog:Dag,dogs:Dag[]}> = 
-      await axios.delete(`${apiBase}/breeds/${idToDel}`);
+    const _dag: AxiosResponse<{
+      success: string;
+      message: string;
+      dog: Dag;
+      dogs: Dag[];
+    }> = await axios.delete(`${apiBase}/breeds/${idToDel}`);
     setDags(_dag.data.dogs);
   } catch (err) {
     console.log(err);
   }
 };
 const addDag = async (setDags: SetDags): Promise<void> => {
-    try {
-      const _dag: AxiosResponse<{success:string;message:string;dog:Dag;dogs:Dag[]}> =
-        await axios.post(`${apiBase}/breeds`);
-      setDags(_dag.data.dogs);
-    } catch (err) {
-      console.log(err);
-    }
+  try {
+    const _dag: AxiosResponse<{
+      success: string;
+      message: string;
+      dog: Dag;
+      dogs: Dag[];
+    }> = await axios.post(`${apiBase}/breeds`);
+    setDags(_dag.data.dogs);
+  } catch (err) {
+    console.log(err);
   }
+};
 const getDags = async (setDags: SetDags): Promise<void> => {
   try {
     const _dags: AxiosResponse<DagResponse> = await axios.get(
@@ -46,9 +57,4 @@ const deleteDags = async (setDags: SetDags): Promise<void> => {
   }
 };
 
-export {
-    addDag,
-    getDags,
-    deleteDags,
-    deleteSingleDag
-}
+export { addDag, getDags, deleteDags, deleteSingleDag };
