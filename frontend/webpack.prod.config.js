@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const htmlPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const dotenv = require("dotenv").config({
   path: path.join(__dirname, ".env"),
 });
@@ -10,7 +11,7 @@ module.exports = {
   entry: "./src/index.tsx",
   devtool: "source-map",
   resolve: {
-    extensions: [".js", ".tsx"],
+    extensions: [".js", ".ts", ".tsx"],
     modules: [
       path.resolve(__dirname, "src"),
       path.resolve(__dirname, "node_modules"),
@@ -23,15 +24,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.tsx$/,
+        test: /\.(ts|tsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: "ts-loader",
-        // options: {
-        //     presets: [
-        //         '@babel/preset-react',
-        //         'babel-preset-env'
-        //     ]
-        // }
+      },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
       },
     ],
   },
@@ -41,6 +40,10 @@ module.exports = {
     }),
     new htmlPlugin({
       template: "./src/index.html",
+    }),
+    new MiniCssExtractPlugin({
+      filename: "styles.css",
+      chunkFilename: "styles.css",
     }),
   ],
 };
