@@ -1,4 +1,4 @@
-import { apiBase } from '../index';
+import { apiBase } from './apiBase';
 import axios, { AxiosResponse } from 'axios';
 import { Dag, DagResponse } from '../types/Dags';
 
