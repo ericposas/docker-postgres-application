@@ -8,7 +8,9 @@
     "lint": "eslint . --ext .ts",
     "fix": "eslint . --ext .ts --fix",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
-    "format:watch": "onchange 'src/**/*.ts' -- prettier --config .prettierrc --write {{changed}}"
+    "format:watch": "onchange 'src/**/*.ts' -- prettier --config .prettierrc --write {{changed}}",
+    "test": "jest",
+    "jest:clear": "jest --clearCache && rm -rf /tmp/jest_rs/"
   },
   "dependencies": {
     "@types/cors": "^2.8.10",
@@ -27,6 +29,8 @@
     "sequelize": "^6.6.2"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.14.4",
+    "@babel/preset-typescript": "^7.13.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "concurrently": "^6.1.0",
@@ -34,6 +38,7 @@
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.3",
     "onchange": "^7.1.0",
     "typescript": "^4.2.4"
   }

@@ -1,0 +1,12 @@
+{
+    "roots": [
+      "test"
+    ],
+    "modulePaths": [
+      "node_modules",
+      "./src"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ]
+}
